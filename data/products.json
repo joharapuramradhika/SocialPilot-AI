@@ -1,0 +1,31 @@
+[
+    {
+        "name": "AI Customer Support",
+        "description": "AI-powered customer support solution for businesses.",
+        "features": [
+            "24/7 availability",
+            "Automated responses",
+            "Multilingual support",
+            "Human handoff"
+        ],
+        "benefits": [
+            "Faster customer responses",
+            "Reduced repetitive work",
+            "Better support availability"
+        ]
+    },
+    {
+        "name": "AI Analytics",
+        "description": "AI-powered analytics solution that helps businesses understand their data.",
+        "features": [
+            "Data analysis",
+            "Automated insights",
+            "Business dashboards"
+        ],
+        "benefits": [
+            "Faster data understanding",
+            "Automated business insights",
+            "Improved decision making"
+        ]
+    }
+]

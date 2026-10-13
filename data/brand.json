@@ -1,0 +1,18 @@
+{
+    "brand_name": "SocialPilot AI",
+    "tone": "professional, modern and clear",
+    "visual_style": "minimal technology design",
+    "restricted_topics": [
+        "hate",
+        "violence",
+        "adult content",
+        "political content",
+        "misinformation"
+    ],
+    "content_rules": [
+        "Do not make unsupported claims",
+        "Do not use offensive language",
+        "Do not create misleading content",
+        "Use approved product information only"
+    ]
+}
