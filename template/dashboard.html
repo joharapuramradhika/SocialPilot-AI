@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SocialPilot AI | Creative Studio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">
+            <div class="brand-logo">S</div>
+            <div class="brand-name">
+                SocialPilot <span>AI</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>System online</span>
+            </div>
+
+            <span class="live-badge" id="publishMode">
+                {{ publish_mode }}
+            </span>
+        </div>
+    </div>
+</header>
+
+<section class="hero-section">
+    <div class="hero-card">
+        <span class="hero-label">
+            SOCIALPILOT AI · CREATIVE STUDIO
+        </span>
+
+        <h1>
+            Imagine it.<br>
+            <span>Ideate it.</span>
+        </h1>
+
+        <p>
+            Turn your ideas into stunning social media creatives
+            with AI-powered content generation and intelligent automation.
+        </p>
+    </div>
+</section>
+
+<main class="page-container">
+
+    <section class="welcome-section">
+        <div class="welcome-copy">
+            <span class="eyebrow">
+                AI-POWERED SOCIAL MEDIA AUTOMATION
+            </span>
+
+            <h1>Creative Studio</h1>
+
+            <p>
+                Create, review, schedule, and publish
+                your social media content in one place.
+            </p>
+        </div>
+
+        <div class="platform-badge">
+            <span class="platform-dot"></span>
+            Instagram
+        </div>
+    </section>
+
+    <div class="dashboard-grid">
+
+        <!-- LEFT COLUMN: IMAGE GENERATION -->
+
+        <section class="creative-column">
+            <div class="card creative-card">
+
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">IMAGE GENERATION</span>
+                        <h2>Create your creative</h2>
+
+                        <p class="card-description">
+                            Turn your ideas into engaging social media visuals.
+                        </p>
+                    </div>
+
+                    <span class="step-badge">01</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="creativePrompt">
+                        Creative prompt
+                    </label>
+
+                    <textarea
+                        id="creativePrompt"
+                        rows="5"
+                        placeholder="Describe the visual, background, lighting, style, and composition..."
+                    >{{ creative.get('prompt', '') }}</textarea>
+
+                    <p class="field-hint">
+                        Describe the visual you want to generate.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageFormat">
+                        Image format
+                    </label>
+
+                    <select id="imageFormat">
+                        <option
+                            value="4:5"
+                            {% if creative.get('format', '4:5') == '4:5' %}
+                                selected
+                            {% endif %}
+                        >
+                            Instagram Portrait (4:5)
+                        </option>
+
+                        <option
+                            value="1:1"
+                            {% if creative.get('format') == '1:1' %}
+                                selected
+                            {% endif %}
+                        >
+                            Square (1:1)
+                        </option>
+
+                        <option
+                            value="9:16"
+                            {% if creative.get('format') == '9:16' %}
+                                selected
+                            {% endif %}
+                        >
+                            Story / Reel (9:16)
+                        </option>
+
+                        <option
+                            value="16:9"
+                            {% if creative.get('format') == '16:9' %}
+                                selected
+                            {% endif %}
+                        >
+                            Landscape (16:9)
+                        </option>
+                    </select>
+
+                    <p id="selectedFormat" class="field-hint">
+                        Selected format: {{ creative.get('format', '4:5') }}
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    id="generateCreativeBtn"
+                    class="btn btn-primary btn-full"
+                >
+                    Generate Creative
+                    <span aria-hidden="true">↗</span>
+                </button>
+
+                <p
+                    id="creativeMessage"
+                    class="message"
+                    aria-live="polite"
+                ></p>
+
+                <div class="preview-section">
+                    <div class="preview-heading">
+                        <span class="eyebrow">CREATIVE PREVIEW</span>
+                        <span class="preview-live">LIVE PREVIEW</span>
+                    </div>
+
+                    <div id="creativePreview" class="creative-preview">
+
+                        <img
+                            id="generatedCreativeImage"
+                            src="{{ creative.get('image', '') }}"
+                            alt="Generated social media creative"
+                            style="{% if creative.get('image') %}display:block;{% else %}display:none;{% endif %}"
+                        >
+
+                        <div
+                            id="creativePlaceholder"
+                            class="creative-placeholder"
+                            style="{% if creative.get('image') %}display:none;{% else %}display:flex;{% endif %}"
+                        >
+                            <div class="placeholder-icon">✳</div>
+
+                            <h3>Your creative starts here</h3>
+
+                            <p>
+                                Enter a prompt and generate your first design.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: CONTENT GENERATION -->
+
+        <section class="review-column">
+
+            <div class="card content-card">
+
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">AI CONTENT</span>
+
+                        <h2>Content generation</h2>
+
+                        <p class="card-description">
+                            Review and edit your generated caption
+                            and hashtags before publishing.
+                        </p>
+                    </div>
+
+                    <span class="step-badge">02</span>
+                </div>
+
+                <!-- CAPTION -->
+
+                <div class="form-group">
+                    <label for="generatedCaption">
+                        Caption
+                    </label>
+
+                    <textarea
+                        id="generatedCaption"
+                        rows="7"
+                        placeholder="Generate a creative to get your caption..."
+                    >{{ content.get('caption', '') }}</textarea>
+
+                    <p class="field-hint">
+                        Your caption is generated by AI.
+                        You can edit it before approving or publishing.
+                    </p>
+                </div>
+
+                <!-- HASHTAGS -->
+
+                <div class="form-group">
+                    <label for="generatedHashtags">
+                        Hashtags
+                    </label>
+
+                    <textarea
+                        id="generatedHashtags"
+                        rows="4"
+                        placeholder="Your hashtags will appear here..."
+                    >{{ content.get('hashtags', []) | join(' ') if content.get('hashtags') is iterable and content.get('hashtags') is not string else content.get('hashtags', '') }}</textarea>
+
+                    <p class="field-hint">
+                        Edit or add hashtags. They will be included
+                        with your Instagram caption.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    id="regenerateBtn"
+                    class="btn btn-secondary btn-full"
+                >
+                    Regenerate content
+                </button>
+
+                <p
+                    id="contentMessage"
+                    class="message"
+                    aria-live="polite"
+                ></p>
+
+            </div>
+
+            <!-- VALIDATION -->
+
+            <div class="card validation-card">
+
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">QUALITY CONTROL</span>
+
+                        <h2>Content validation</h2>
+
+                        <p class="card-description">
+                            Automated checks for your campaign content.
+                        </p>
+                    </div>
+
+                    <span class="step-badge">03</span>
+                </div>
+
+                <div
+                    id="validationResult"
+                    class="validation-box {% if validation.get('status') == 'PASS' %}validation-success{% else %}validation-error{% endif %}"
+                >
+                    <div class="validation-icon" id="validationIcon">
+                        {% if validation.get('status') == 'PASS' %}
+                            ✓
+                        {% else %}
+                            !
+                        {% endif %}
+                    </div>
+
+                    <div class="validation-content">
+
+                        <h3 id="validationHeading">
+                            {% if validation.get('status') == 'PASS' %}
+                                Validation passed
+                            {% else %}
+                                Validation requires attention
+                            {% endif %}
+                        </h3>
+
+                        <div id="validationProblems">
+                            {% for problem in validation.get('problems', []) %}
+                                <p>{{ problem }}</p>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- APPROVAL -->
+
+            <div class="card approval-card">
+
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">HUMAN REVIEW</span>
+
+                        <h2>Approve your creative</h2>
+
+                        <p class="card-description">
+                            Review the image, caption, and hashtags
+                            before publishing.
+                        </p>
+                    </div>
+
+                    <span class="step-badge">04</span>
+                </div>
+
+                <div class="status-row">
+                    <span class="meta-label">Current status</span>
+
+                    <span id="postStatus" class="status-pill">
+                        {{ post_status }}
+                    </span>
+                </div>
+
+                <div class="button-row">
+                    <button
+                        type="button"
+                        id="approveBtn"
+                        class="btn btn-success"
+                    >
+                        ✓ Approve
+                    </button>
+
+                    <button
+                        type="button"
+                        id="rejectBtn"
+                        class="btn btn-danger"
+                    >
+                        Reject
+                    </button>
+                </div>
+
+                <p
+                    id="postMessage"
+                    class="message"
+                    aria-live="polite"
+                ></p>
+
+            </div>
+
+        </section>
+
+        <!-- BOTTOM SECTION -->
+
+        <section class="bottom-column">
+
+            <!-- SCHEDULING -->
+
+            <div class="card schedule-card">
+
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">POST AUTOMATION</span>
+
+                        <h2>Schedule your post</h2>
+
+                        <p class="card-description">
+                            Choose when your approved content should
+                            be published.
+                        </p>
+                    </div>
+
+                    <span class="step-badge">05</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="scheduleDateTime">
+                        Schedule date and time
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="scheduleDateTime"
+                    >
+                </div>
+
+                <button
+                    type="button"
+                    id="scheduleBtn"
+                    class="btn btn-secondary btn-full"
+                >
+                    Schedule post
+                </button>
+
+                <div class="schedule-info">
+                    <span class="meta-label">
+                        Next scheduled post
+                    </span>
+
+                    <p id="scheduledTime">
+                        {{ schedule or 'No upcoming posts' }}
+                    </p>
+                </div>
+
+                <p id="scheduleStatus" class="status-pill"></p>
+
+                <p
+                    id="scheduleMessage"
+                    class="message"
+                    aria-live="polite"
+                ></p>
+
+            </div>
+
+            <!-- PUBLISH -->
+
+            <div class="card publish-card">
+
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">INSTAGRAM</span>
+
+                        <h2>Publish your post</h2>
+
+                        <p class="card-description">
+                            Publish your approved creative to Instagram.
+                        </p>
+                    </div>
+
+                    <span class="step-badge">06</span>
+                </div>
+
+                <div class="publish-info">
+
+                    <div class="publish-icon">
+                        <span>◎</span>
+                    </div>
+
+                    <div>
+                        <h3>Ready to publish?</h3>
+
+                        <p>
+                            Make sure your creative, caption, and hashtags
+                            have been reviewed and approved.
+                        </p>
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="publishBtn"
+                    class="btn btn-primary btn-full"
+                >
+                    Publish to Instagram
+                    <span aria-hidden="true">↗</span>
+                </button>
+
+                <p
+                    id="publishMessage"
+                    class="message"
+                    aria-live="polite"
+                ></p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <footer class="page-footer">
+        <p>SocialPilot AI · Creative Studio</p>
+
+        <span>
+            AI-assisted content · Human-reviewed publishing
+        </span>
+    </footer>
+
+</main>
+
+<script
+    src="{{ url_for('static', filename='js/dashboard.js') }}"
+    defer
+></script>
+
+</body>
+</html>
